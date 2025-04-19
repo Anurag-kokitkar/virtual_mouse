@@ -1,0 +1,51 @@
+--Django--
+
+-----------------------------------------------------------------------------------
+
+- high level python web development framework for app development 
+- framework give me basic and necessary things needed to build app
+- used for rapid framework and clean design
+- used less coding
+- Web app is which is interact with user and data is imp aspect in it , it run on browser
+- website work on static pages , same content is available for all
+- ". com" seems to be web app
+- loosely coupled means code doesn't depend in each other means if one block     of    code is not working properly only that block will repaired .
+
+
+- app used to placed the modules in it.
+- 2nd insta is default app 
+- manage.py used to run project
+setting.py used to track all paths
+-other framework work on mvc model
+- it follows mvt model
+model
+view
+template
+-url.py used to handle request then it goes towards views and then to template
+----------------------------------------------------------------
+Day 2 of Django :-
+----------------------------------------------------------------
+
+- views:-
+1) class based 
+2) function based
+- there are class based view where code written in classes.
+- ORM(object oriented mapping)is help to write sql queries and  convert the code from any lang into any type of queries.
+
+- Run Migration :
+  --------------
+# to create Django project:
+ Django-admin startproject projectName
+
+# To run Django project:
+ python manage.py runserver
+
+# TO combine all DB changes:
+ python manage.py makemigrations
+
+# To apply DB changes:
+  python manage.py migrate
+
+- use react-js for frontend and Django for backend
+- rest api used to transfer backend data to frontend
+- django-rest-framework used to use api's

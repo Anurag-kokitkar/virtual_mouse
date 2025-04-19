@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #1e3c72, #2a5298);
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        #fileDisplay {
+            margin: 20px auto;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            max-width: 90%;
+        }
+
+        iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+            border-radius: 5px;
+            background: white;
+        }
+
+        img {
+            max-width: 100%;
+            max-height: 500px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        pre {
+            white-space: pre-wrap;
+            text-align: left;
+            background: white;
+            color: black;
+            padding: 15px;
+            border-radius: 5px;
+            width: 100%;
+            max-height: 500px;
+            overflow: auto;
+            margin: 0;
+        }
+
+        #open-word {
+            background: #2a5298;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        #open-word:hover {
+            background: #1e3c72;
+        }
+
+        /* Loading Spinner */
+        #loading-spinner {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            z-index: 1000;
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .back-link {
+            color: yellow;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h2>Selected File</h2>
+    <p>File Name: {{ filename }}</p>
+
+    <div id="fileDisplay">
+        {% if file_type == 'txt' %}
+            <pre>{{ file_content }}</pre>
+   
+        {% elif file_type == 'pdf' %}
+            <iframe src="{{ url_for('uploaded_file', filename=filename) }}" type="application/pdf"></iframe>
+   
+        {% elif file_type in ['png', 'jpg', 'jpeg', 'gif'] %}
+            <img src="{{ url_for('uploaded_file', filename=filename) }}" alt="Uploaded Image">
+   
+        {% elif file_type in ['doc', 'docx'] %}
+            {% if open_word_button %}
+                <button id="open-word">Open in Word</button>
+                <p>Click the button above to open the document in Microsoft Word.</p>
+            {% else %}
+                <p>Word document viewer not available. <a href="{{ url_for('uploaded_file', filename=filename) }}" download>Download File</a></p>
+            {% endif %}
+       
+        {% elif file_type in ['ppt', 'pptx'] %}
+            <iframe src="https://docs.google.com/gview?url={{ request.host_url | replace('http://', 'https://') }}uploads/{{ filename }}&embedded=true"></iframe>
+
+        {% else %}
+            <p>Unsupported file format. <a href="{{ url_for('uploaded_file', filename=filename) }}" download>Download File</a></p>
+        {% endif %}
+    </div>
+       
+    <a href="{{ url_for('user_dashboard') }}" class="back-link">Back to Dashboard</a>
+
+    <!-- Loading Spinner -->
+    <div id="loading-spinner"></div>
+
+    <script>
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const openWordButton = document.getElementById('open-word');
+
+        // Only add event listener if the button exists
+        if (openWordButton) {
+            openWordButton.addEventListener('click', () => {
+                loadingSpinner.style.display = 'block';
+                const filePath = "{{ url_for('uploaded_file', filename=filename) }}";
+               
+                fetch('/open_word', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ file_path: filePath }),
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.status === "success") {
+                        alert("Document opened in Microsoft Word.");
+                    } else {
+                        alert("Failed to open document: " + (data.message || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("An error occurred while trying to open the document.");
+                })
+                .finally(() => {
+                    loadingSpinner.style.display = 'none';
+                });
+            });
+        }
+    </script>
+</body>
+</html>

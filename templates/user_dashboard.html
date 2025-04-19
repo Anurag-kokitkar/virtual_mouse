@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WaveDrive - User Dashboard</title>
+    <style>
+        /* Google Font */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #0072ff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            margin-bottom: 30px; /* Increases space between navbar and content */
+        }
+
+        .navbar h1 {
+            font-size: 1.8rem;
+        }
+
+        .user-info {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            font-weight: bold;
+            color: #0072ff;
+        }
+
+        .logout-btn {
+            background: #ff4d4d;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #cc0000;
+        }
+
+        /* Dashboard Container */
+        .dashboard-container {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            color: black;
+            width: 60%;
+            margin: auto;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            padding-top: 20px; /* Adds space at the top of the content */
+        }
+
+        h2 {
+            color: #0072ff;
+            font-size: 1.5rem;
+        }
+
+        /* File Upload Section */
+        .file-upload {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+        }
+
+        .file-upload input {
+            margin: 10px 0;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            display: block;
+            width: 100%;
+        }
+
+        .upload-btn {
+            background: #0072ff;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: 0.3s;
+            width: 100%;
+        }
+
+        .upload-btn:hover {
+            background: #005ecb;
+        }
+
+        /* Gesture Guide */
+        .gesture-guide {
+            margin-top: 20px;
+            background: white;
+            color: black;
+            padding: 15px;
+            border-radius: 10px;
+            display: inline-block;
+            width: 60%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .gesture-guide h3 {
+            color: #0072ff;
+            font-size: 1.3rem;
+        }
+
+        .gesture-guide ul {
+            list-style: none;
+            padding: 10px;
+            font-size: 1rem;
+        }
+
+        .gesture-guide li {
+            padding: 8px;
+            background: #f0f0f0;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+        }
+
+        .gesture-guide li::before {
+            content: '👉';
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <h1>🌊 WaveDrive</h1>
+        <div class="user-info">
+            <span>👤 {{ username }}</span>
+            <a href="{{ url_for('logout') }}" class="logout-btn">🚪 Logout</a>
+        </div>
+    </header>
+
+    <main class="dashboard-container">
+        <h2>Welcome, {{ username }}! 👋</h2>
+        <p>Use gestures to navigate and manage your files effortlessly.</p>
+
+        <!-- File Upload Section -->
+        <div class="file-upload">
+            <form action="{{ url_for('upload_file') }}" method="POST" enctype="multipart/form-data">
+                <label for="file">📁 Choose a file:</label>
+                <input type="file" name="file" id="file">
+                <button type="submit" class="upload-btn">⬆️ Upload</button>
+            </form>
+        </div>
+
+        <!-- Gesture Guide -->
+        <section class="gesture-guide">
+            <h3>🎭 Gesture Guide</h3>
+            <ul>
+                <li>👆 **Swipe Up** → Scroll Up</li>
+                <li>👇 **Swipe Down** → Scroll Down</li>
+                <li>✋ **Open Palm** → Select Text</li>
+                <li>🤏 **Pinch Gesture** → Click</li>
+                <li>✌️ **Two Fingers Swipe** → Navigate Back</li>
+            </ul>
+        </section>
+    </main>
+
+</body>
+</html>
